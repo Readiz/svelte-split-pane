@@ -1,6 +1,6 @@
 {
   "name": "svelte-split-pane",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Split Pane Splitter Both for Horizontal and Vertial written in Svelte",
   "keywords": [
     "svelte",
