@@ -59,7 +59,7 @@ main {
     margin: 0 auto;
 }
 div.wrapper {
-    width: 800px;
+    width: 90%;
     height: 400px;
     margin: auto;
 }
