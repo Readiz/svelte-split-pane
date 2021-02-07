@@ -7,6 +7,7 @@ Easy to use to separate panes horizontally.
 
 #### Usage
 
+It is easy to use, just use slots to place contents.
 ```html
 <script>
     import { HSplitPane, VSplitPane } from 'svelte-split-pane';
@@ -39,11 +40,10 @@ Easy to use to separate panes horizontally.
 </div>
 ```
 
-...where leftPane / rightPane are components for each pane.
+### Example
 
-Example:
-![](2020-12-21-01-44-02.png)
+http://www.readiz.com/svelte-split-pane/
 
 #### Optional Parameters
+
 updateCallback: this is called when splitting is finished.
-marginTop: marginTop value for splitter.
