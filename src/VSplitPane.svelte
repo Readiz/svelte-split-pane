@@ -7,6 +7,20 @@
     }
 
     let md;
+    const onMouseDown = (e) => {
+        e.preventDefault();
+        if (e.button !== 0) return;
+        md = {e,
+            offsetLeft:  separator.offsetLeft,
+            offsetTop:   separator.offsetTop,
+            firstHeight:  top.offsetHeight,
+            secondHeight: down.offsetHeight
+        };
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('touchmove', onMouseMove);
+        window.addEventListener('touchend', onMouseUp);
+    };
     const onMouseMove = (e) => {
         e.preventDefault();
         if (e.button !== 0) return;
@@ -29,6 +43,8 @@
         updateCallback();
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
+        window.removeEventListener('touchmove', onMouseMove);
+        window.removeEventListener('touchend', onMouseUp);
     }
     function resetSize() {
         if (top) top.removeAttribute('style');
@@ -90,20 +106,7 @@
             </div>
         </slot>
     </div>
-    <div bind:this={separator} class="separator"
-    on:mousedown={(e) => {
-        e.preventDefault();
-        if (e.button !== 0) return;
-        md = {e,
-            offsetLeft:  separator.offsetLeft,
-            offsetTop:   separator.offsetTop,
-            firstHeight:  top.offsetHeight,
-            secondHeight: down.offsetHeight
-        };
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
-    }}
-    >
+    <div bind:this={separator} class="separator" on:mousedown={onMouseDown} on:touchstart={onMouseDown}>
     </div>
     <div bind:this={down} class="down">
         <slot name="down">

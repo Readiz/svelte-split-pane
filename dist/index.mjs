@@ -356,7 +356,7 @@ const get_right_slot_context = ctx => ({});
 const get_left_slot_changes = dirty => ({});
 const get_left_slot_context = ctx => ({});
 
-// (88:26)               
+// (104:26)               
 function fallback_block_1(ctx) {
 	let div;
 
@@ -375,7 +375,7 @@ function fallback_block_1(ctx) {
 	};
 }
 
-// (111:27)               
+// (113:27)               
 function fallback_block(ctx) {
 	let div;
 
@@ -404,11 +404,11 @@ function create_fragment(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	const left_slot_template = /*#slots*/ ctx[12].left;
-	const left_slot = create_slot(left_slot_template, ctx, /*$$scope*/ ctx[11], get_left_slot_context);
+	const left_slot_template = /*#slots*/ ctx[10].left;
+	const left_slot = create_slot(left_slot_template, ctx, /*$$scope*/ ctx[9], get_left_slot_context);
 	const left_slot_or_fallback = left_slot || fallback_block_1();
-	const right_slot_template = /*#slots*/ ctx[12].right;
-	const right_slot = create_slot(right_slot_template, ctx, /*$$scope*/ ctx[11], get_right_slot_context);
+	const right_slot_template = /*#slots*/ ctx[10].right;
+	const right_slot = create_slot(right_slot_template, ctx, /*$$scope*/ ctx[9], get_right_slot_context);
 	const right_slot_or_fallback = right_slot || fallback_block();
 
 	return {
@@ -438,10 +438,10 @@ function create_fragment(ctx) {
 				left_slot_or_fallback.m(div0, null);
 			}
 
-			/*div0_binding*/ ctx[13](div0);
+			/*div0_binding*/ ctx[11](div0);
 			append(div3, t0);
 			append(div3, div1);
-			/*div1_binding*/ ctx[14](div1);
+			/*div1_binding*/ ctx[12](div1);
 			append(div3, t1);
 			append(div3, div2);
 
@@ -449,24 +449,28 @@ function create_fragment(ctx) {
 				right_slot_or_fallback.m(div2, null);
 			}
 
-			/*div2_binding*/ ctx[16](div2);
+			/*div2_binding*/ ctx[13](div2);
 			current = true;
 
 			if (!mounted) {
-				dispose = listen(div1, "mousedown", /*mousedown_handler*/ ctx[15]);
+				dispose = [
+					listen(div1, "mousedown", /*onMouseDown*/ ctx[7]),
+					listen(div1, "touchstart", /*onMouseDown*/ ctx[7])
+				];
+
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
 			if (left_slot) {
-				if (left_slot.p && dirty & /*$$scope*/ 2048) {
-					update_slot(left_slot, left_slot_template, ctx, /*$$scope*/ ctx[11], dirty, get_left_slot_changes, get_left_slot_context);
+				if (left_slot.p && dirty & /*$$scope*/ 512) {
+					update_slot(left_slot, left_slot_template, ctx, /*$$scope*/ ctx[9], dirty, get_left_slot_changes, get_left_slot_context);
 				}
 			}
 
 			if (right_slot) {
-				if (right_slot.p && dirty & /*$$scope*/ 2048) {
-					update_slot(right_slot, right_slot_template, ctx, /*$$scope*/ ctx[11], dirty, get_right_slot_changes, get_right_slot_context);
+				if (right_slot.p && dirty & /*$$scope*/ 512) {
+					update_slot(right_slot, right_slot_template, ctx, /*$$scope*/ ctx[9], dirty, get_right_slot_changes, get_right_slot_context);
 				}
 			}
 
@@ -500,12 +504,12 @@ function create_fragment(ctx) {
 		d(detaching) {
 			if (detaching) detach(div3);
 			if (left_slot_or_fallback) left_slot_or_fallback.d(detaching);
-			/*div0_binding*/ ctx[13](null);
-			/*div1_binding*/ ctx[14](null);
+			/*div0_binding*/ ctx[11](null);
+			/*div1_binding*/ ctx[12](null);
 			if (right_slot_or_fallback) right_slot_or_fallback.d(detaching);
-			/*div2_binding*/ ctx[16](null);
+			/*div2_binding*/ ctx[13](null);
 			mounted = false;
-			dispose();
+			run_all(dispose);
 		}
 	};
 }
@@ -521,6 +525,24 @@ function instance($$self, $$props, $$invalidate) {
 
 	let md;
 
+	const onMouseDown = e => {
+		e.preventDefault();
+		if (e.button !== 0) return;
+
+		md = {
+			e,
+			offsetLeft: separator.offsetLeft,
+			offsetTop: separator.offsetTop,
+			firstWidth: left.offsetWidth,
+			secondWidth: right.offsetWidth
+		};
+
+		window.addEventListener("mousemove", onMouseMove);
+		window.addEventListener("mouseup", onMouseUp);
+		window.addEventListener("touchmove", onMouseMove);
+		window.addEventListener("touchend", onMouseUp);
+	};
+
 	const onMouseMove = e => {
 		e.preventDefault();
 		if (e.button !== 0) return;
@@ -534,8 +556,8 @@ function instance($$self, $$props, $$invalidate) {
 		delta.x = Math.min(Math.max(delta.x, -md.firstWidth), md.secondWidth);
 
 		$$invalidate(4, separator.style.left = md.offsetLeft + delta.x + "px", separator);
-		$$invalidate(6, left.style.width = md.firstWidth + delta.x + "px", left);
-		$$invalidate(7, right.style.width = md.secondWidth - delta.x + "px", right);
+		$$invalidate(5, left.style.width = md.firstWidth + delta.x + "px", left);
+		$$invalidate(6, right.style.width = md.secondWidth - delta.x + "px", right);
 		updateCallback();
 	};
 
@@ -548,6 +570,8 @@ function instance($$self, $$props, $$invalidate) {
 		updateCallback();
 		window.removeEventListener("mousemove", onMouseMove);
 		window.removeEventListener("mouseup", onMouseUp);
+		window.removeEventListener("touchmove", onMouseMove);
+		window.removeEventListener("touchend", onMouseUp);
 	};
 
 	function resetSize() {
@@ -578,7 +602,7 @@ function instance($$self, $$props, $$invalidate) {
 	function div0_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			left = $$value;
-			$$invalidate(6, left);
+			$$invalidate(5, left);
 		});
 	}
 
@@ -589,36 +613,20 @@ function instance($$self, $$props, $$invalidate) {
 		});
 	}
 
-	const mousedown_handler = e => {
-		e.preventDefault();
-		if (e.button !== 0) return;
-
-		$$invalidate(5, md = {
-			e,
-			offsetLeft: separator.offsetLeft,
-			offsetTop: separator.offsetTop,
-			firstWidth: left.offsetWidth,
-			secondWidth: right.offsetWidth
-		});
-
-		window.addEventListener("mousemove", onMouseMove);
-		window.addEventListener("mouseup", onMouseUp);
-	};
-
 	function div2_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			right = $$value;
-			$$invalidate(7, right);
+			$$invalidate(6, right);
 		});
 	}
 
 	$$self.$$set = $$props => {
-		if ("updateCallback" in $$props) $$invalidate(10, updateCallback = $$props.updateCallback);
+		if ("updateCallback" in $$props) $$invalidate(8, updateCallback = $$props.updateCallback);
 		if ("leftPaneSize" in $$props) $$invalidate(0, leftPaneSize = $$props.leftPaneSize);
 		if ("rightPaneSize" in $$props) $$invalidate(1, rightPaneSize = $$props.rightPaneSize);
 		if ("minLeftPaneSize" in $$props) $$invalidate(2, minLeftPaneSize = $$props.minLeftPaneSize);
 		if ("minRightPaneSize" in $$props) $$invalidate(3, minRightPaneSize = $$props.minRightPaneSize);
-		if ("$$scope" in $$props) $$invalidate(11, $$scope = $$props.$$scope);
+		if ("$$scope" in $$props) $$invalidate(9, $$scope = $$props.$$scope);
 	};
 
 	$$self.$$.update = () => {
@@ -637,17 +645,14 @@ function instance($$self, $$props, $$invalidate) {
 		minLeftPaneSize,
 		minRightPaneSize,
 		separator,
-		md,
 		left,
 		right,
-		onMouseMove,
-		onMouseUp,
+		onMouseDown,
 		updateCallback,
 		$$scope,
 		slots,
 		div0_binding,
 		div1_binding,
-		mousedown_handler,
 		div2_binding
 	];
 }
@@ -657,7 +662,7 @@ class HSplitPane extends SvelteComponent {
 		super();
 
 		init(this, options, instance, create_fragment, safe_not_equal, {
-			updateCallback: 10,
+			updateCallback: 8,
 			leftPaneSize: 0,
 			rightPaneSize: 1,
 			minLeftPaneSize: 2,
@@ -675,7 +680,7 @@ const get_down_slot_context = ctx => ({});
 const get_top_slot_changes = dirty => ({});
 const get_top_slot_context = ctx => ({});
 
-// (87:25)               
+// (103:25)               
 function fallback_block_1$1(ctx) {
 	let div;
 
@@ -694,7 +699,7 @@ function fallback_block_1$1(ctx) {
 	};
 }
 
-// (109:26)               
+// (112:26)               
 function fallback_block$1(ctx) {
 	let div;
 
@@ -723,11 +728,11 @@ function create_fragment$1(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	const top_slot_template = /*#slots*/ ctx[12].top;
-	const top_slot = create_slot(top_slot_template, ctx, /*$$scope*/ ctx[11], get_top_slot_context);
+	const top_slot_template = /*#slots*/ ctx[10].top;
+	const top_slot = create_slot(top_slot_template, ctx, /*$$scope*/ ctx[9], get_top_slot_context);
 	const top_slot_or_fallback = top_slot || fallback_block_1$1();
-	const down_slot_template = /*#slots*/ ctx[12].down;
-	const down_slot = create_slot(down_slot_template, ctx, /*$$scope*/ ctx[11], get_down_slot_context);
+	const down_slot_template = /*#slots*/ ctx[10].down;
+	const down_slot = create_slot(down_slot_template, ctx, /*$$scope*/ ctx[9], get_down_slot_context);
 	const down_slot_or_fallback = down_slot || fallback_block$1();
 
 	return {
@@ -757,10 +762,10 @@ function create_fragment$1(ctx) {
 				top_slot_or_fallback.m(div0, null);
 			}
 
-			/*div0_binding*/ ctx[13](div0);
+			/*div0_binding*/ ctx[11](div0);
 			append(div3, t0);
 			append(div3, div1);
-			/*div1_binding*/ ctx[14](div1);
+			/*div1_binding*/ ctx[12](div1);
 			append(div3, t1);
 			append(div3, div2);
 
@@ -768,24 +773,28 @@ function create_fragment$1(ctx) {
 				down_slot_or_fallback.m(div2, null);
 			}
 
-			/*div2_binding*/ ctx[16](div2);
+			/*div2_binding*/ ctx[13](div2);
 			current = true;
 
 			if (!mounted) {
-				dispose = listen(div1, "mousedown", /*mousedown_handler*/ ctx[15]);
+				dispose = [
+					listen(div1, "mousedown", /*onMouseDown*/ ctx[7]),
+					listen(div1, "touchstart", /*onMouseDown*/ ctx[7])
+				];
+
 				mounted = true;
 			}
 		},
 		p(ctx, [dirty]) {
 			if (top_slot) {
-				if (top_slot.p && dirty & /*$$scope*/ 2048) {
-					update_slot(top_slot, top_slot_template, ctx, /*$$scope*/ ctx[11], dirty, get_top_slot_changes, get_top_slot_context);
+				if (top_slot.p && dirty & /*$$scope*/ 512) {
+					update_slot(top_slot, top_slot_template, ctx, /*$$scope*/ ctx[9], dirty, get_top_slot_changes, get_top_slot_context);
 				}
 			}
 
 			if (down_slot) {
-				if (down_slot.p && dirty & /*$$scope*/ 2048) {
-					update_slot(down_slot, down_slot_template, ctx, /*$$scope*/ ctx[11], dirty, get_down_slot_changes, get_down_slot_context);
+				if (down_slot.p && dirty & /*$$scope*/ 512) {
+					update_slot(down_slot, down_slot_template, ctx, /*$$scope*/ ctx[9], dirty, get_down_slot_changes, get_down_slot_context);
 				}
 			}
 
@@ -819,12 +828,12 @@ function create_fragment$1(ctx) {
 		d(detaching) {
 			if (detaching) detach(div3);
 			if (top_slot_or_fallback) top_slot_or_fallback.d(detaching);
-			/*div0_binding*/ ctx[13](null);
-			/*div1_binding*/ ctx[14](null);
+			/*div0_binding*/ ctx[11](null);
+			/*div1_binding*/ ctx[12](null);
 			if (down_slot_or_fallback) down_slot_or_fallback.d(detaching);
-			/*div2_binding*/ ctx[16](null);
+			/*div2_binding*/ ctx[13](null);
 			mounted = false;
-			dispose();
+			run_all(dispose);
 		}
 	};
 }
@@ -840,6 +849,24 @@ function instance$1($$self, $$props, $$invalidate) {
 
 	let md;
 
+	const onMouseDown = e => {
+		e.preventDefault();
+		if (e.button !== 0) return;
+
+		md = {
+			e,
+			offsetLeft: separator.offsetLeft,
+			offsetTop: separator.offsetTop,
+			firstHeight: top.offsetHeight,
+			secondHeight: down.offsetHeight
+		};
+
+		window.addEventListener("mousemove", onMouseMove);
+		window.addEventListener("mouseup", onMouseUp);
+		window.addEventListener("touchmove", onMouseMove);
+		window.addEventListener("touchend", onMouseUp);
+	};
+
 	const onMouseMove = e => {
 		e.preventDefault();
 		if (e.button !== 0) return;
@@ -853,8 +880,8 @@ function instance$1($$self, $$props, $$invalidate) {
 		delta.y = Math.min(Math.max(delta.y, -md.firstHeight), md.secondHeight);
 
 		$$invalidate(4, separator.style.top = md.offsetTop + delta.y + "px", separator);
-		$$invalidate(6, top.style.height = md.firstHeight + delta.y + "px", top);
-		$$invalidate(7, down.style.height = md.secondHeight - delta.y + "px", down);
+		$$invalidate(5, top.style.height = md.firstHeight + delta.y + "px", top);
+		$$invalidate(6, down.style.height = md.secondHeight - delta.y + "px", down);
 		updateCallback();
 	};
 
@@ -867,6 +894,8 @@ function instance$1($$self, $$props, $$invalidate) {
 		updateCallback();
 		window.removeEventListener("mousemove", onMouseMove);
 		window.removeEventListener("mouseup", onMouseUp);
+		window.removeEventListener("touchmove", onMouseMove);
+		window.removeEventListener("touchend", onMouseUp);
 	};
 
 	function resetSize() {
@@ -897,7 +926,7 @@ function instance$1($$self, $$props, $$invalidate) {
 	function div0_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			top = $$value;
-			$$invalidate(6, top);
+			$$invalidate(5, top);
 		});
 	}
 
@@ -908,36 +937,20 @@ function instance$1($$self, $$props, $$invalidate) {
 		});
 	}
 
-	const mousedown_handler = e => {
-		e.preventDefault();
-		if (e.button !== 0) return;
-
-		$$invalidate(5, md = {
-			e,
-			offsetLeft: separator.offsetLeft,
-			offsetTop: separator.offsetTop,
-			firstHeight: top.offsetHeight,
-			secondHeight: down.offsetHeight
-		});
-
-		window.addEventListener("mousemove", onMouseMove);
-		window.addEventListener("mouseup", onMouseUp);
-	};
-
 	function div2_binding($$value) {
 		binding_callbacks[$$value ? "unshift" : "push"](() => {
 			down = $$value;
-			$$invalidate(7, down);
+			$$invalidate(6, down);
 		});
 	}
 
 	$$self.$$set = $$props => {
-		if ("updateCallback" in $$props) $$invalidate(10, updateCallback = $$props.updateCallback);
+		if ("updateCallback" in $$props) $$invalidate(8, updateCallback = $$props.updateCallback);
 		if ("topPanelSize" in $$props) $$invalidate(0, topPanelSize = $$props.topPanelSize);
 		if ("downPanelSize" in $$props) $$invalidate(1, downPanelSize = $$props.downPanelSize);
 		if ("minTopPaneSize" in $$props) $$invalidate(2, minTopPaneSize = $$props.minTopPaneSize);
 		if ("minDownPaneSize" in $$props) $$invalidate(3, minDownPaneSize = $$props.minDownPaneSize);
-		if ("$$scope" in $$props) $$invalidate(11, $$scope = $$props.$$scope);
+		if ("$$scope" in $$props) $$invalidate(9, $$scope = $$props.$$scope);
 	};
 
 	$$self.$$.update = () => {
@@ -956,17 +969,14 @@ function instance$1($$self, $$props, $$invalidate) {
 		minTopPaneSize,
 		minDownPaneSize,
 		separator,
-		md,
 		top,
 		down,
-		onMouseMove,
-		onMouseUp,
+		onMouseDown,
 		updateCallback,
 		$$scope,
 		slots,
 		div0_binding,
 		div1_binding,
-		mousedown_handler,
 		div2_binding
 	];
 }
@@ -976,7 +986,7 @@ class VSplitPane extends SvelteComponent {
 		super();
 
 		init(this, options, instance$1, create_fragment$1, safe_not_equal, {
-			updateCallback: 10,
+			updateCallback: 8,
 			topPanelSize: 0,
 			downPanelSize: 1,
 			minTopPaneSize: 2,
