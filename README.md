@@ -6,7 +6,12 @@ Easy to use to separate panes horizontally / vertically.
 
 ![](2021-02-07-23-58-06.png)
 
-#### Usage
+## Example
+
+- GitHub Pages Example: http://www.readiz.com/svelte-split-pane/
+- Svelte REPL Example: https://svelte.dev/repl/5ab84358dd8b46ad9474884f2359ff9b?version=3
+
+## Usage
 
 Just use slots to place contents.
 ```html
@@ -41,14 +46,13 @@ Just use slots to place contents.
 </div>
 ```
 
-### Example
+## Optional Parameters
 
-http://www.readiz.com/svelte-split-pane/
+- updateCallback: this is called when splitting is finished.
+- [left|right|top|down]PaneSize: Specify the Pane size. (Default: 50%)
+- min[left|right|top|down]PaneSize: Specify minimum value of the each Pane.
 
-#### Optional Parameters
+## License
 
-updateCallback: this is called when splitting is finished.
-
-[left|right|top|down]PaneSize: Specify the Pane size. (Default: 50%)
-
-min[left|right|top|down]PaneSize: Specify minimum value of the each Pane.
+- MIT
+- PR & Suggestions are welcome!
