@@ -1,13 +1,14 @@
 # Split Pane for Svelte
 
 This is a splitter plugin for Svelte Application.
-Easy to use to separate panes horizontally.
+
+Easy to use to separate panes horizontally / vertically.
 
 ![](2021-02-07-23-58-06.png)
 
 #### Usage
 
-It is easy to use, just use slots to place contents.
+Just use slots to place contents.
 ```html
 <script>
     import { HSplitPane, VSplitPane } from 'svelte-split-pane';
@@ -47,3 +48,7 @@ http://www.readiz.com/svelte-split-pane/
 #### Optional Parameters
 
 updateCallback: this is called when splitting is finished.
+
+[left|right|top|down]PaneSize: Specify the Pane size. (Default: 50%)
+
+min[left|right|top|down]PaneSize: Specify minimum value of the each Pane.
