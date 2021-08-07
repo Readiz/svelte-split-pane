@@ -1,5 +1,14 @@
 <script>
     import { HSplitPane, VSplitPane } from '../../src';
+
+    let classPointerEventsNone;
+
+    const onMouseDown = () => {
+        classPointerEventsNone = 'pointer-events-none';
+    }
+    const onMouseUp = () => {
+        classPointerEventsNone = '';
+    }
 </script>
 
 <main>
@@ -16,6 +25,16 @@
         </right>
     </HSplitPane>
     </div>
+
+    <h1>H Splite Pane Iframe</h1>
+    <div class="wrapper">
+        <HSplitPane onMouseDown="{onMouseDown}" onMouseUp="{onMouseUp}">
+            <iframe slot="left" class="{classPointerEventsNone}" src="https://example.com" title="left" border="none">
+            </iframe>
+            <iframe slot="right" class="{classPointerEventsNone}" src="https://example.com" title="right" border="none">
+            </iframe>
+        </HSplitPane>
+    </div>
     <h1>V Splite Pane Default</h1>
     <div class="wrapper">
     <VSplitPane updateCallback={() => {
@@ -29,6 +48,16 @@
         </down>
     </VSplitPane>
     </div>
+    <h1>V Splite Pane Iframe</h1>
+    <div class="wrapper">
+        <VSplitPane onMouseDown="{onMouseDown}" onMouseUp="{onMouseUp}">
+            <iframe slot="top" class="{classPointerEventsNone}" src="https://example.com" title="top">
+            </iframe>
+            <iframe slot="down" class="{classPointerEventsNone}" src="https://example.com" title="down">
+            </iframe>
+        </VSplitPane>
+    </div>
+
     <h1>H Splite Pane 75% : 25% with minSize "50px"</h1>
     <div class="wrapper">
     <HSplitPane leftPaneSize="75%" rightPaneSize="25%" minLeftPaneSize="50px" minRightPaneSize="50px">
@@ -74,5 +103,14 @@ left, top {
 }
 right, down {
     background-color: cornflowerblue;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+.pointer-events-none {
+    pointer-events: none;
 }
 </style>
