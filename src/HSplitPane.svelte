@@ -5,9 +5,18 @@
         // do nothing
         return;
     }
+    export let onMouseDown = () => {
+        // do nothing
+        return;
+    }
+    export let onMouseUp = () => {
+        // do nothing
+        return;
+    }
     let md;
-    const onMouseDown = (e) => {
+    const onMouseDownWrapper = (e) => {
         e.preventDefault();
+        onMouseDown();
         if (e.button !== 0) return;
         md = {e,
             offsetLeft:  separator.offsetLeft,
@@ -16,9 +25,9 @@
             secondWidth: right.offsetWidth
         };
         window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('mouseup', onMouseUpWrapper);
         window.addEventListener('touchmove', onMouseMove);
-        window.addEventListener('touchend', onMouseUp);
+        window.addEventListener('touchend', onMouseUpWrapper);
     }
     const onMouseMove = (e) => {
         e.preventDefault();
@@ -33,16 +42,17 @@
         right.style.width = (md.secondWidth - delta.x) + "px";
         updateCallback();
     }
-    const onMouseUp = (e) => {
+    const onMouseUpWrapper = (e) => {
+        onMouseUp();
         if (e) {
             e.preventDefault();
             if (e.button !== 0) return;
         }
         updateCallback();
         window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
+        window.removeEventListener('mouseup', onMouseUpWrapper);
         window.removeEventListener('touchmove', onMouseMove);
-        window.removeEventListener('touchend', onMouseUp);
+        window.removeEventListener('touchend', onMouseUpWrapper);
     }
     function resetSize() {
         if (left) left.removeAttribute('style');
@@ -50,7 +60,7 @@
         if (separator) separator.removeAttribute('style');
     }
     function onResize() {
-        onMouseUp();
+        onMouseUpWrapper();
         resetSize();
     }
     onMount(() => {
@@ -107,7 +117,7 @@
             </div>
         </slot>
     </div>
-    <div bind:this={separator} class="separator" on:mousedown={onMouseDown} on:touchstart={onMouseDown}>
+    <div bind:this={separator} class="separator" on:mousedown={onMouseDownWrapper} on:touchstart={onMouseDownWrapper}>
     </div>
     <div bind:this={right} class="right">
         <slot name="right">
