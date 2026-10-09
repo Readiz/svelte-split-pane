@@ -8,7 +8,7 @@ Easy to use to separate panes horizontally / vertically.
 
 ## Example
 
-- GitHub Pages Example: http://www.readiz.com/svelte-split-pane/
+- GitHub Pages Example: https://git.readiz.com/svelte-split-pane/
 - Svelte REPL Example: https://svelte.dev/repl/5ab84358dd8b46ad9474884f2359ff9b?version=3
 
 ## Usage
